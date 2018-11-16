@@ -29,6 +29,9 @@ data class MatchModel(
         var homeId: String? = "",
 
         @SerializedName("idAwayTeam")
-        var awayId: String? = ""
+        var awayId: String? = "",
+
+        @SerializedName("strTime")
+        var matchTime: String? = ""
 
 )

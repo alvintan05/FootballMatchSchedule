@@ -1,5 +1,6 @@
 package k.com.alvin.footballmatchschedule.adapter
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.database.Favorite
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,6 +35,7 @@ class RecyclerFavoritesAdapter(private val listFavorite: List<Favorite>, private
         private val homeScore: TextView = view.findViewById(R.id.tv_left_score)
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
+        private val matchTime: TextView = view.findViewById(R.id.tv_time)
 
         fun bindItem(listFavorite: Favorite, listener: (Favorite) -> Unit) {
             homeName.text = listFavorite.homeTeamName
@@ -50,6 +53,8 @@ class RecyclerFavoritesAdapter(private val listFavorite: List<Favorite>, private
 
             matchDate.text = dateFormat(listFavorite.matchDate!!)
 
+            matchTime.text = timeFormat(listFavorite.matchTime!!)
+
             itemView.setOnClickListener {
                 listener(listFavorite)
             }
@@ -62,6 +67,16 @@ class RecyclerFavoritesAdapter(private val listFavorite: List<Favorite>, private
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
             val finalDate: String = newFormat.format(date)
             return finalDate
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun timeFormat(oldTime: String): String {
+            val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
+            val time: Date
+            time = timeformat.parse(oldTime)
+            val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
+            val finalTime: String = newFormat.format(time)
+            return  finalTime
         }
 
     }

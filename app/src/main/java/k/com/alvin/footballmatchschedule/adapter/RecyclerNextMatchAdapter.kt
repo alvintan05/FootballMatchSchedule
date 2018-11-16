@@ -1,5 +1,6 @@
 package k.com.alvin.footballmatchschedule.adapter
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
         private val homeScore: TextView = view.findViewById(R.id.tv_left_score)
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
+        private val matchTime: TextView = view.findViewById(R.id.tv_time)
 
         fun bindItem(listMatch: MatchModel, listener: (MatchModel) -> Unit) {
             homeName.text = listMatch.homeTeam
@@ -51,6 +53,8 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
 
             matchDate.text = dateFormat(listMatch.matchDate!!)
 
+            matchTime.text = timeFormat(listMatch.matchTime!!)
+
             itemView.setOnClickListener {
                 listener(listMatch)
             }
@@ -64,6 +68,17 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
             val finalDate: String = newFormat.format(date)
             return finalDate
         }
+
+        @SuppressLint("SimpleDateFormat")
+        fun timeFormat(oldTime: String): String {
+            val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
+            val time: Date
+            time = timeformat.parse(oldTime)
+            val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
+            val finalTime: String = newFormat.format(time)
+            return  finalTime
+        }
+
 
     }
 

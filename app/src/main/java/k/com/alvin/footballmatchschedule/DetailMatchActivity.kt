@@ -72,7 +72,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
 
     }
 
-    private fun getFromApi(){
+    private fun getFromApi() {
 
         presenter.getDetailMatchList(eventId)
 
@@ -82,6 +82,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         detailModels.addAll(data)
 
         tv_detail_date.text = dateFormat(data[0].matchDate!!)
+        tv_detail_time.text = timeFormat(data[0].matchTime!!)
         tv_detail_home_team.text = data[0].homeTeam
         tv_detail_away_team.text = data[0].awayTeam
         tv_detail_home_score.text = data[0].homeScore
@@ -96,7 +97,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         tv_detail_away_defense.text = data[0].awayLineupDefense?.replace("; ", "\n")
         tv_detail_home_midfield.text = data[0].homeLineupMidfield?.replace("; ", "\n")
         tv_detail_away_midfield.text = data[0].awayLineupMidfield?.replace("; ", "\n")
-        tv_detail_home_forward.text = data[0].homeLineupForward?.replace("; " , "\n")
+        tv_detail_home_forward.text = data[0].homeLineupForward?.replace("; ", "\n")
         tv_detail_away_forward.text = data[0].awayLineupForward?.replace("; ", "\n")
         tv_detail_home_subtitute.text = data[0].homeLineupSubtitutes?.replace("; ", "\n")
         tv_detail_away_subtitute.text = data[0].awayLineupSubtitutes?.replace("; ", "\n")
@@ -119,6 +120,16 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
         val finalDate: String = newFormat.format(date)
         return finalDate
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun timeFormat(oldTime: String): String {
+        val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
+        val time: Date
+        time = timeformat.parse(oldTime)
+        val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
+        val finalTime: String = newFormat.format(time)
+        return finalTime
     }
 
     override fun showLoading() {
@@ -172,6 +183,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
                         Favorite.HOME_SHOTS to detailModels[0].homeShots,
                         Favorite.AWAY_SHOTS to detailModels[0].awayShots,
                         Favorite.MATCH_DATE to detailModels[0].matchDate,
+                        Favorite.MATCH_TIME to detailModels[0].matchTime,
                         Favorite.AWAY_GOAL_DETAILS to detailModels[0].awayGoalDetails,
                         Favorite.AWAY_LINEUP_DEFENSE to detailModels[0].awayLineupDefense,
                         Favorite.AWAY_LINEUP_FORWARD to detailModels[0].awayLineupForward,
@@ -210,7 +222,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_add_to_favorites)
     }
 
-    private fun favoriteState(){
+    private fun favoriteState() {
         database.use {
             val result = select(Favorite.TABLE_FAVORITE)
                     .whereArgs("(EVENT_ID = {id})",
@@ -220,7 +232,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         }
     }
 
-    private fun checkStatus(){
+    private fun checkStatus() {
         if (checkType == "1") {
             Log.d("DetailActivity", "Dari API")
             getFromApi()
@@ -247,6 +259,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         getFavorite()
 
         tv_detail_date.text = dateFormat(favorites[0].matchDate!!)
+        tv_detail_time.text = timeFormat(favorites[0].matchTime!!)
         tv_detail_home_team.text = favorites[0].homeTeamName
         tv_detail_away_team.text = favorites[0].awayTeamName
         tv_detail_home_score.text = favorites[0].homeScore

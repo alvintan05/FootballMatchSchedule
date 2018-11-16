@@ -31,6 +31,9 @@ data class DetailMatchModel(
         @SerializedName("strDate")
         var matchDate: String? = "",
 
+        @SerializedName("strTime")
+        var matchTime: String? = "",
+
         @SerializedName("strAwayGoalDetails")
         var awayGoalDetails: String? = "",
 

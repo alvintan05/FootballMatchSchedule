@@ -14,6 +14,7 @@ data class Favorite(val id: Long?,
                     val homeShots: String?,
                     val awayShots: String?,
                     val matchDate: String?,
+                    val matchTime: String?,
                     val awayGoalDetails: String?,
                     val awayLineupDefense: String?,
                     val awayLineupForward: String?,
@@ -40,6 +41,7 @@ data class Favorite(val id: Long?,
         const val HOME_SHOTS: String = "HOME_SHOTS"
         const val AWAY_SHOTS: String = "AWAY_SHOTS"
         const val MATCH_DATE: String = "MATCH_DATE"
+        const val MATCH_TIME: String = "MATCH_TIME"
         const val AWAY_GOAL_DETAILS: String = "AWAY_GOAL_DETAILS"
         const val AWAY_LINEUP_DEFENSE: String = "AWAY_LINEUP_DEFENSE"
         const val AWAY_LINEUP_FORWARD: String = "AWAY_LINEUP_FORWARD"
