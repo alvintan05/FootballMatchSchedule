@@ -27,7 +27,6 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
         holder.bindItem(listMatch[position], listener)
     }
 
-
     class NextMatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val homeName: TextView = view.findViewById(R.id.tv_left_team)

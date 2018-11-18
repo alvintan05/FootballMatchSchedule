@@ -105,11 +105,11 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     }
 
     override fun showHomeInfo(data: List<TeamInfoModel>) {
-        Glide.with(this).load(data[0].teamLogoLink).override(120, 120).into(image_home_team)
+        Glide.with(this).load(data[0].teamBadge).override(120, 120).into(image_home_team)
     }
 
     override fun showAwayInfo(data: List<TeamInfoModel>) {
-        Glide.with(this).load(data[0].teamLogoLink).override(120, 120).into(image_away_team)
+        Glide.with(this).load(data[0].teamBadge).override(120, 120).into(image_away_team)
     }
 
     @SuppressLint("SimpleDateFormat")

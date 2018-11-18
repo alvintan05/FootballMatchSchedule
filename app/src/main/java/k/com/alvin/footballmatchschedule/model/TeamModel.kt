@@ -3,9 +3,9 @@ package k.com.alvin.footballmatchschedule.model
 import com.google.gson.annotations.SerializedName
 
 /**
- * Created by Alvin Tandiardi on 01/11/2018.
+ * Created by Alvin Tandiardi on 17/11/2018.
  */
-data class TeamInfoModel(
+data class TeamModel (
 
         @SerializedName("idTeam")
         val teamId: String? = null,
@@ -23,9 +23,6 @@ data class TeamInfoModel(
         var teamStadium: String? = null,
 
         @SerializedName("strDescriptionEN")
-        var teamDescription: String? = null,
-
-        @SerializedName("strStadiumThumb")
-        var teamStadiumImage: String? = null
+        var teamDescription: String? = null
 
 )
