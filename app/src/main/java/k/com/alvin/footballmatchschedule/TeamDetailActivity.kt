@@ -24,7 +24,6 @@ import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class TeamDetailActivity : AppCompatActivity(), TeamDetailView {

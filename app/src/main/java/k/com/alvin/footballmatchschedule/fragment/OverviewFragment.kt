@@ -11,7 +11,6 @@ import android.widget.TextView
 import com.google.gson.Gson
 
 import k.com.alvin.footballmatchschedule.R
-import k.com.alvin.footballmatchschedule.adapter.TeamPagerAdapter.Companion.KEY_TEAM
 import k.com.alvin.footballmatchschedule.api.ApiRepository
 import k.com.alvin.footballmatchschedule.model.TeamInfoModel
 import k.com.alvin.footballmatchschedule.presenter.TeamDetailPresenter
@@ -27,6 +26,22 @@ class OverviewFragment : Fragment(), TeamDetailView {
     private lateinit var teamId: String
 
     private lateinit var teamOverview: TextView
+
+    companion object {
+        const val KEY_TEAM = "KEY_TEAM"
+
+        fun newOverviewInstance(teamId: String): OverviewFragment {
+
+            val bundle = Bundle()
+            bundle.putString(KEY_TEAM, teamId)
+
+            val fragment = OverviewFragment()
+            fragment.arguments = bundle
+
+            return fragment
+
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

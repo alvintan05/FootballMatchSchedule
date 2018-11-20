@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.model.MatchModel
+import k.com.alvin.footballmatchschedule.util.invisible
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,8 +38,11 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
         private val matchTime: TextView = view.findViewById(R.id.tv_time)
+        private val reminder: ImageView = view.findViewById(R.id.image_alarm)
 
         fun bindItem(listMatchModel: MatchModel, listener: (MatchModel) -> Unit) {
+
+            reminder.invisible()
             homeName.text = listMatchModel.homeTeam
             awayName.text = listMatchModel.awayTeam
 
