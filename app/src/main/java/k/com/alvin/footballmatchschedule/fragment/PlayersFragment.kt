@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.google.gson.Gson
+import k.com.alvin.footballmatchschedule.PlayerDetailActivity
 
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.adapter.RecyclerPlayerAdapter
@@ -19,6 +20,7 @@ import k.com.alvin.footballmatchschedule.presenter.PlayerPresenter
 import k.com.alvin.footballmatchschedule.util.invisible
 import k.com.alvin.footballmatchschedule.util.visible
 import k.com.alvin.footballmatchschedule.view.PlayerView
+import org.jetbrains.anko.support.v4.startActivity
 
 
 /**
@@ -74,7 +76,9 @@ class PlayersFragment : Fragment(), PlayerView {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = RecyclerPlayerAdapter(playerList) {
-
+            startActivity<PlayerDetailActivity>(
+                "player" to it
+            )
         }
         recyclerView.adapter = adapter
 

@@ -1,10 +1,13 @@
 package k.com.alvin.footballmatchschedule.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by Alvin Tandiardi on 20/11/2018.
  */
+@Parcelize
 data class PlayerModel(
         @SerializedName("idPlayer")
         val playerId: String? = "",
@@ -31,5 +34,14 @@ data class PlayerModel(
         val playerBanner: String? = "",
 
         @SerializedName("strBirthLocation")
-        val playerBirthLocation: String? = ""
-)
+        val playerBirthLocation: String? = "",
+
+        @SerializedName("dateBorn")
+        val playerBirthDate: String? = "",
+
+        @SerializedName("dateSigned")
+        val playerDateSigned: String? = "",
+
+        @SerializedName("strNationality")
+        val playerNationatlity: String? = ""
+) : Parcelable
