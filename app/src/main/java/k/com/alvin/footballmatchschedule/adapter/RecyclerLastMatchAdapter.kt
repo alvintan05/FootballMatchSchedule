@@ -40,29 +40,29 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
         private val matchTime: TextView = view.findViewById(R.id.tv_time)
         private val reminder: ImageView = view.findViewById(R.id.image_alarm)
 
-        fun bindItem(listMatchModel: MatchModel, listener: (MatchModel) -> Unit) {
+        fun bindItem(match: MatchModel, listener: (MatchModel) -> Unit) {
 
             reminder.invisible()
-            homeName.text = listMatchModel.homeTeam
-            awayName.text = listMatchModel.awayTeam
+            homeName.text = match.homeTeam
+            awayName.text = match.awayTeam
 
-            if (listMatchModel.homeScore.isNullOrBlank())
+            if (match.homeScore.isNullOrBlank())
                 homeScore.text = ""
             else
-                homeScore.text = listMatchModel.homeScore.toString()
+                homeScore.text = match.homeScore.toString()
 
-            if (listMatchModel.awayScore.isNullOrBlank())
+            if (match.awayScore.isNullOrBlank())
                 awayScore.text = ""
             else
-                awayScore.text = listMatchModel.awayScore.toString()
+                awayScore.text = match.awayScore.toString()
 
-            matchDate.text = dateFormat(listMatchModel.matchDate!!)
+            matchDate.text = dateFormat(match.matchDate!!)
 
-            matchTime.text = timeFormat(listMatchModel.matchTime!!)
+            matchTime.text = timeFormat(match.matchTime!!)
 
 
             itemView.setOnClickListener {
-                listener(listMatchModel)
+                listener(match)
             }
         }
 

@@ -55,6 +55,7 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "Favorit
                 Team.TEAM_NAME to TEXT,
                 Team.TEAM_FORMED_YEAR to TEXT,
                 Team.TEAM_STADIUM to TEXT,
+                Team.TEAM_STADIUM_IMAGE to TEXT,
                 Team.TEAM_DESCRIPTION to TEXT,
                 Team.TEAM_BADGE to TEXT)
     }

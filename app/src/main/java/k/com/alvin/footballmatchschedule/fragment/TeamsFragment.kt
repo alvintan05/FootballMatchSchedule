@@ -59,7 +59,10 @@ class TeamsFragment : Fragment(), TeamView {
 
         recyclerViewTeam.layoutManager = LinearLayoutManager(context)
         adapter = RecyclerTeamsAdapter(teams) {
-            ctx.startActivity<TeamDetailActivity>("id" to "${it.teamId}")
+            ctx.startActivity<TeamDetailActivity>(
+                    "id" to "${it.teamId}",
+                    "name" to "${it.teamName}",
+                    "status" to "1")
         }
         recyclerViewTeam.adapter = adapter
 

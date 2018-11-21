@@ -8,15 +8,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.database.Favorite
-import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by Alvin Tandiardi on 08/11/2018.
  */
-class RecyclerFavoritesAdapter(private val listFavorite: List<Favorite>, private val listener: (Favorite) -> Unit)
-    : RecyclerView.Adapter<RecyclerFavoritesAdapter.FavoriteViewHolder>() {
+class RecyclerFavoritesMatchAdapter(private val listFavorite: List<Favorite>, private val listener: (Favorite) -> Unit)
+    : RecyclerView.Adapter<RecyclerFavoritesMatchAdapter.FavoriteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         return FavoriteViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_match, parent, false))

@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import k.com.alvin.footballmatchschedule.api.ApiRepository
 import k.com.alvin.footballmatchschedule.api.TheSportDBApi
 import k.com.alvin.footballmatchschedule.model.TeamInfoResponse
-import k.com.alvin.footballmatchschedule.model.TeamResponse
 import k.com.alvin.footballmatchschedule.util.CoroutineContextProvider
 import k.com.alvin.footballmatchschedule.view.TeamView
 import kotlinx.coroutines.experimental.async

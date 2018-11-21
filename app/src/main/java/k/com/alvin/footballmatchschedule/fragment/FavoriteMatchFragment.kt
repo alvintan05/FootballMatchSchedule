@@ -13,8 +13,7 @@ import android.widget.ProgressBar
 import k.com.alvin.footballmatchschedule.DetailMatchActivity
 
 import k.com.alvin.footballmatchschedule.R
-import k.com.alvin.footballmatchschedule.R.string.favorites
-import k.com.alvin.footballmatchschedule.adapter.RecyclerFavoritesAdapter
+import k.com.alvin.footballmatchschedule.adapter.RecyclerFavoritesMatchAdapter
 import k.com.alvin.footballmatchschedule.database.Favorite
 import k.com.alvin.footballmatchschedule.database.database
 import k.com.alvin.footballmatchschedule.util.invisible
@@ -31,7 +30,7 @@ import org.jetbrains.anko.support.v4.startActivity
 class FavoriteMatchFragment : Fragment() {
 
     private var favoritesMatch: MutableList<Favorite> = mutableListOf()
-    private lateinit var adapter: RecyclerFavoritesAdapter
+    private lateinit var matchAdapter: RecyclerFavoritesMatchAdapter
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var progressBar: ProgressBar
 
@@ -48,14 +47,14 @@ class FavoriteMatchFragment : Fragment() {
         progressBar.visible()
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = RecyclerFavoritesAdapter(favoritesMatch) {
+        matchAdapter = RecyclerFavoritesMatchAdapter(favoritesMatch) {
             startActivity<DetailMatchActivity>(
                     "eventId" to "${it.eventId}",
                     "homeId" to "${it.homeId}",
                     "awayId" to "${it.awayId}",
                     "status" to "0")
         }
-        recyclerView.adapter = adapter
+        recyclerView.adapter = matchAdapter
 
         swipeRefresh.setColorSchemeResources(R.color.colorAccent,
                 android.R.color.holo_green_light,
@@ -78,7 +77,7 @@ class FavoriteMatchFragment : Fragment() {
             val result = select(Favorite.TABLE_FAVORITE)
             val favorite = result.parseList(classParser<Favorite>())
             favoritesMatch.addAll(favorite)
-            adapter.notifyDataSetChanged()
+            matchAdapter.notifyDataSetChanged()
             progressBar.invisible()
         }
     }

@@ -8,24 +8,24 @@ import com.google.gson.annotations.SerializedName
 data class TeamInfoModel(
 
         @SerializedName("idTeam")
-        val teamId: String? = null,
+        val teamId: String? = "",
 
         @SerializedName("strTeam")
-        var teamName: String? = null,
+        var teamName: String? = "",
 
         @SerializedName("strTeamBadge")
-        var teamBadge: String? = null,
+        var teamBadge: String? = "",
 
         @SerializedName("intFormedYear")
-        var teamFormedYear: String? = null,
+        var teamFormedYear: String? = "",
 
         @SerializedName("strStadium")
-        var teamStadium: String? = null,
+        var teamStadium: String? = "",
 
         @SerializedName("strDescriptionEN")
-        var teamDescription: String? = null,
+        var teamDescription: String? = "",
 
         @SerializedName("strStadiumThumb")
-        var teamStadiumImage: String? = null
+        var teamStadiumImage: String? = ""
 
 )

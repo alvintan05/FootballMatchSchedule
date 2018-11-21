@@ -22,11 +22,11 @@
         </activity>
         <activity
             android:name=".DetailMatchActivity"
-            android:theme="@style/NoActionBar"></activity>
-
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".TeamDetailActivity"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".PlayerDetailActivity"></activity>
     </application>
 
 </manifest>

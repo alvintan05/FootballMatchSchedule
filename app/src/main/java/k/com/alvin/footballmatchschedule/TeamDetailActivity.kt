@@ -4,21 +4,26 @@ import android.database.sqlite.SQLiteConstraintException
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import k.com.alvin.footballmatchschedule.R.drawable.ic_add_to_favorites
 import k.com.alvin.footballmatchschedule.R.drawable.ic_added_to_favorites
+import k.com.alvin.footballmatchschedule.R.id.add_to_favorite
 import k.com.alvin.footballmatchschedule.R.menu.favorite_detail_menu
 import k.com.alvin.footballmatchschedule.adapter.TeamPagerAdapter
 import k.com.alvin.footballmatchschedule.api.ApiRepository
+import k.com.alvin.footballmatchschedule.database.Favorite
 import k.com.alvin.footballmatchschedule.database.Team
 import k.com.alvin.footballmatchschedule.database.database
 import k.com.alvin.footballmatchschedule.fragment.OverviewFragment
 import k.com.alvin.footballmatchschedule.model.TeamInfoModel
 import k.com.alvin.footballmatchschedule.presenter.TeamDetailPresenter
+import k.com.alvin.footballmatchschedule.util.invisible
 import k.com.alvin.footballmatchschedule.view.TeamDetailView
+import kotlinx.android.synthetic.main.activity_detail_match.*
 import kotlinx.android.synthetic.main.activity_team_detail.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
@@ -33,6 +38,8 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
 
     private lateinit var presenter: TeamDetailPresenter
     private lateinit var teamId: String
+    private lateinit var teamName: String
+    private lateinit var checkType: String
 
     private var menuItem: Menu? = null
     private var isFavorite: Boolean = false
@@ -43,8 +50,10 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
 
         val intent = intent
         teamId = intent.getStringExtra("id")
+        teamName = intent.getStringExtra("name")
+        checkType = intent.getStringExtra("status")
 
-        val teamAdapter = TeamPagerAdapter(teamId, supportFragmentManager)
+        val teamAdapter = TeamPagerAdapter(teamId, teamName, supportFragmentManager)
         team_view_pager.adapter = teamAdapter
         team_tab_layout.setupWithViewPager(team_view_pager)
 
@@ -55,8 +64,15 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
         val request = ApiRepository()
         val gson = Gson()
         presenter = TeamDetailPresenter(this, request, gson)
-        presenter.getTeamDetail(teamId)
 
+        checkStatus()
+
+        favoriteState()
+
+    }
+
+    private fun getFromApi() {
+        presenter.getTeamDetail(teamId)
     }
 
     override fun showTeamDetail(data: List<TeamInfoModel>) {
@@ -80,12 +96,13 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(favorite_detail_menu, menu)
         menuItem = menu
+        setFavorite()
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.add_to_favorite -> {
+            add_to_favorite -> {
 
                 if (isFavorite) removeFromFavorite()
                 else addToFavorite()
@@ -108,6 +125,8 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
                         Team.TEAM_NAME to teamModels[0].teamName,
                         Team.TEAM_FORMED_YEAR to teamModels[0].teamFormedYear,
                         Team.TEAM_STADIUM to teamModels[0].teamStadium,
+                        Team.TEAM_STADIUM_IMAGE to teamModels[0].teamStadiumImage,
+                        Team.TEAM_DESCRIPTION to teamModels[0].teamDescription,
                         Team.TEAM_BADGE to teamModels[0].teamBadge)
             }
             toast("Added to favorite")
@@ -137,12 +156,48 @@ class TeamDetailActivity : AppCompatActivity(), TeamDetailView {
 
     private fun favoriteState() {
         database.use {
-            val result = select(Team.TEAM_ID)
-                    .whereArgs("(EVENT_ID = {id})",
+            val result = select(Team.TABLE_TEAM)
+                    .whereArgs("(TEAM_ID = {id})",
                             "id" to teamId)
             val favorite = result.parseList(classParser<Team>())
-            if (!favorite.isEmpty()) isFavorite = true
+            if (!favorite.isEmpty()) {
+                isFavorite = true
+            }
         }
     }
+
+    private fun checkStatus() {
+        if (checkType == "1") {
+            Log.d("DetailActivity", "Dari API")
+            getFromApi()
+        }
+        if (checkType == "0") {
+            Log.d("DetailActivity", "Dari database")
+            showFavorite()
+        }
+    }
+
+    private fun getFavorite() {
+        this.database.use {
+            val result = select(Team.TABLE_TEAM)
+                    .whereArgs("(TEAM_ID = {id})",
+                            "id" to teamId)
+            val favorite = result.parseList(classParser<Team>())
+            favorites.addAll(favorite)
+        }
+    }
+
+    private fun showFavorite() {
+        getFavorite()
+
+        Glide.with(this).load(favorites[0].teamBadge).into(detail_team_badge)
+        Glide.with(this).load(favorites[0].teamStadiumImage).into(img_banner)
+        detail_team_name.text = favorites[0].teamName
+        detail_team_year.text = favorites[0].teamFormedYear
+        detail_team_stadium.text = favorites[0].teamStadium
+
+        collapse_tb.title = favorites[0].teamName
+    }
+
 
 }

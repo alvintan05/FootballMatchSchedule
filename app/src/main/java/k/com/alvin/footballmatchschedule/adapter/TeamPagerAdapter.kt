@@ -9,12 +9,12 @@ import k.com.alvin.footballmatchschedule.fragment.PlayersFragment
 /**
  * Created by Alvin Tandiardi on 18/11/2018.
  */
-class TeamPagerAdapter(private val teamId: String, fm: FragmentManager): FragmentPagerAdapter(fm) {
+class TeamPagerAdapter(private val teamId: String, private val teamName: String, fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
             0 -> OverviewFragment.newOverviewInstance(teamId)
-            else -> return PlayersFragment()
+            else -> return PlayersFragment.newPlayerInstance(teamName)
         }
     }
 

@@ -13,8 +13,8 @@ class MatchPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> LastMatchFragment()
-            else -> return NextMatchFragment()
+            0 -> NextMatchFragment()
+            else -> return LastMatchFragment()
         }
     }
 
@@ -24,8 +24,8 @@ class MatchPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence {
         return when (position) {
-            0 -> "LAST MATCH"
-            else -> return "NEXT MATCH"
+            0 -> "NEXT MATCH"
+            else -> return "LAST MATCH"
         }
     }
 }
