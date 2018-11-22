@@ -6,10 +6,14 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ProgressBar
+import android.widget.Spinner
 import com.google.gson.Gson
 import k.com.alvin.footballmatchschedule.DetailMatchActivity
 
@@ -22,6 +26,8 @@ import k.com.alvin.footballmatchschedule.presenter.LastMatchPresenter
 import k.com.alvin.footballmatchschedule.util.invisible
 import k.com.alvin.footballmatchschedule.util.visible
 import k.com.alvin.footballmatchschedule.view.LastView
+import kotlinx.android.synthetic.main.fragment_last_match.*
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
@@ -34,9 +40,11 @@ class LastMatchFragment : Fragment(), LastView {
     private var matchModels: MutableList<MatchModel> = mutableListOf()
     private lateinit var presenter: LastMatchPresenter
     private lateinit var adapter: RecyclerLastMatchAdapter
+    private lateinit var spinner: Spinner
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var progressBar: ProgressBar
-    private val leagueId: String = "4328"
+    private lateinit var leagueName: String
+    private var leagueId: String = "4328"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,8 +53,12 @@ class LastMatchFragment : Fragment(), LastView {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rv_last_match)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
-
         progressBar = view.findViewById(R.id.progress_bar)
+        spinner = view.findViewById(R.id.last_match_spinner)
+
+        val spinnerItems = resources.getStringArray(R.array.league)
+        val spinnerAdapater = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
+        spinner.adapter = spinnerAdapater
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = RecyclerLastMatchAdapter(matchModels) {
@@ -66,7 +78,51 @@ class LastMatchFragment : Fragment(), LastView {
         val request = ApiRepository()
         val gson = Gson()
         presenter = LastMatchPresenter(this, request, gson)
-        presenter.getLastMatchList(leagueId)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                leagueName = spinner.selectedItem.toString()
+
+                if (leagueName == spinnerItems[0]) {
+                    Log.d("nama league", spinnerItems[0])
+                    leagueId = "4328"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+                if (leagueName == spinnerItems[1]) {
+                    Log.d("nama league", spinnerItems[1])
+                    leagueId = "4329"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+                if (leagueName == spinnerItems[2]) {
+                    Log.d("nama league", spinnerItems[2])
+                    leagueId = "4331"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+                if (leagueName == spinnerItems[3]) {
+                    Log.d("nama league", spinnerItems[3])
+                    leagueId = "4332"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+                if (leagueName == spinnerItems[4]) {
+                    Log.d("nama league", spinnerItems[4])
+                    leagueId = "4334"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+                if (leagueName == spinnerItems[5]) {
+                    Log.d("nama league", spinnerItems[5])
+                    leagueId = "4335"
+                    presenter.getLastMatchList(leagueId)
+                }
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         swipeRefresh.onRefresh {
             presenter.getLastMatchList(leagueId)

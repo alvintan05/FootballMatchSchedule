@@ -1,10 +1,14 @@
 package k.com.alvin.footballmatchschedule.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.provider.CalendarContract
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.model.MatchModel
@@ -25,6 +29,7 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
 
     override fun onBindViewHolder(holder: NextMatchViewHolder, position: Int) {
         holder.bindItem(listMatch[position], listener)
+
     }
 
     class NextMatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,8 +40,19 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
         private val matchTime: TextView = view.findViewById(R.id.tv_time)
+        private val addMatch: ImageView = view.findViewById(R.id.image_alarm)
 
         fun bindItem(listMatch: MatchModel, listener: (MatchModel) -> Unit) {
+
+            val timeformat: SimpleDateFormat = SimpleDateFormat("hh:mm:ss")
+            val timeNew: Date
+            timeNew = timeformat.parse(listMatch.matchTime)
+//            val newFormat: SimpleDateFormat = SimpleDateFormat("hh:mm:ss")
+//            val finalTime: String = newFormat.format(time)
+
+            val time: String = timeFormat(listMatch.matchTime!!)
+            val date: String = dateFormat(listMatch.matchDate!!)
+
             homeName.text = listMatch.homeTeam
             awayName.text = listMatch.awayTeam
 
@@ -50,12 +66,23 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
             else
                 awayScore.text = listMatch.awayScore
 
-            matchDate.text = dateFormat(listMatch.matchDate!!)
+            matchDate.text = date
 
-            matchTime.text = timeFormat(listMatch.matchTime!!)
+            matchTime.text = time
 
             itemView.setOnClickListener {
                 listener(listMatch)
+            }
+
+            addMatch.setOnClickListener {
+
+                val intent = Intent(Intent.ACTION_EDIT)
+                intent.type = "vnd.android.cursor.item/event"
+                intent.putExtra(CalendarContract.Events.TITLE, "${listMatch.homeTeam} vs ${listMatch.awayTeam}")
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, timeNew.time)
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time + 1)
+                intent.putExtra(CalendarContract.CalendarAlerts.ALARM_TIME, 30)
+                itemView.context.startActivity(intent)
             }
         }
 
@@ -75,7 +102,7 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
             time = timeformat.parse(oldTime)
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
             val finalTime: String = newFormat.format(time)
-            return  finalTime
+            return finalTime
         }
 
 
