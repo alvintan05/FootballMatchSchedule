@@ -1,13 +1,17 @@
 package k.com.alvin.footballmatchschedule.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.provider.CalendarContract
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.database.Favorite
+import k.com.alvin.footballmatchschedule.util.invisible
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,8 +39,12 @@ class RecyclerFavoritesMatchAdapter(private val listFavorite: List<Favorite>, pr
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
         private val matchTime: TextView = view.findViewById(R.id.tv_time)
+        private val reminder: ImageView = view.findViewById(R.id.image_alarm)
 
         fun bindItem(listFavorite: Favorite, listener: (Favorite) -> Unit) {
+
+            val dateMatch = toGMTFormat(listFavorite.matchDate!!, listFavorite.matchTime!!)
+
             homeName.text = listFavorite.homeTeamName
             awayName.text = listFavorite.awayTeamName
 
@@ -50,32 +58,51 @@ class RecyclerFavoritesMatchAdapter(private val listFavorite: List<Favorite>, pr
             else
                 awayScore.text = listFavorite.awayScore.toString()
 
-            matchDate.text = dateFormat(listFavorite.matchDate!!)
+            if (!listFavorite.homeScore.isNullOrBlank() && !listFavorite.awayScore.isNullOrBlank()) {
+                reminder.invisible()
+            }
 
-            matchTime.text = timeFormat(listFavorite.matchTime!!)
+            matchDate.text = dateFormat(dateMatch!!)
+
+            matchTime.text = timeFormat(dateMatch)
 
             itemView.setOnClickListener {
                 listener(listFavorite)
             }
+
+            reminder.setOnClickListener {
+
+                val intent = Intent(Intent.ACTION_EDIT)
+                intent.type = "vnd.android.cursor.item/event"
+                intent.putExtra(CalendarContract.Events.TITLE, "${listFavorite.homeTeamName} vs ${listFavorite.awayTeamName}")
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, dateMatch.time)
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, dateMatch.time + 5_400_000)
+                intent.putExtra(CalendarContract.CalendarAlerts.ALARM_TIME, 1_800_000)
+                itemView.context.startActivity(intent)
+            }
+
         }
 
-        fun dateFormat(oldDate: String): String {
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/mm/yy")
-            val date: Date
-            date = dateFormat.parse(oldDate)
+        @SuppressLint("SimpleDateFormat")
+        fun dateFormat(matchDate : Date): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-            val finalDate: String = newFormat.format(date)
+            val finalDate: String = newFormat.format(matchDate)
             return finalDate
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun timeFormat(oldTime: String): String {
-            val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
-            val time: Date
-            time = timeformat.parse(oldTime)
+        fun timeFormat(matchTime : Date): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
-            val finalTime: String = newFormat.format(time)
-            return  finalTime
+            val finalTime: String = newFormat.format(matchTime)
+            return finalTime
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun toGMTFormat(date: String, time: String): Date? {
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$date $time"
+            return formatter.parse(dateTime)
         }
 
     }

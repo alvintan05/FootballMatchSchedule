@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(main_toolbar)
+
         bottom_navigation_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 match -> {

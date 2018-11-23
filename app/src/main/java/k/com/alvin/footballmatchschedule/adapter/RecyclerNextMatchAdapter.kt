@@ -44,14 +44,7 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
 
         fun bindItem(listMatch: MatchModel, listener: (MatchModel) -> Unit) {
 
-            val timeformat: SimpleDateFormat = SimpleDateFormat("hh:mm:ss")
-            val timeNew: Date
-            timeNew = timeformat.parse(listMatch.matchTime)
-//            val newFormat: SimpleDateFormat = SimpleDateFormat("hh:mm:ss")
-//            val finalTime: String = newFormat.format(time)
-
-            val time: String = timeFormat(listMatch.matchTime!!)
-            val date: String = dateFormat(listMatch.matchDate!!)
+            val dateMatch = toGMTFormat(listMatch.matchDate!!, listMatch.matchTime!!)
 
             homeName.text = listMatch.homeTeam
             awayName.text = listMatch.awayTeam
@@ -66,9 +59,9 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
             else
                 awayScore.text = listMatch.awayScore
 
-            matchDate.text = date
+            matchDate.text = dateFormat(dateMatch!!)
 
-            matchTime.text = time
+            matchTime.text = timeFormat(dateMatch)
 
             itemView.setOnClickListener {
                 listener(listMatch)
@@ -79,30 +72,33 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
                 val intent = Intent(Intent.ACTION_EDIT)
                 intent.type = "vnd.android.cursor.item/event"
                 intent.putExtra(CalendarContract.Events.TITLE, "${listMatch.homeTeam} vs ${listMatch.awayTeam}")
-                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, timeNew.time)
-                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time + 1)
-                intent.putExtra(CalendarContract.CalendarAlerts.ALARM_TIME, 30)
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, dateMatch.time)
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, dateMatch.time + 5_400_000)
+                intent.putExtra(CalendarContract.CalendarAlerts.ALARM_TIME, 1_800_000)
                 itemView.context.startActivity(intent)
             }
         }
 
-        fun dateFormat(oldDate: String): String {
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/mm/yy")
-            val date: Date
-            date = dateFormat.parse(oldDate)
+        @SuppressLint("SimpleDateFormat")
+        fun dateFormat(matchDate : Date): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-            val finalDate: String = newFormat.format(date)
+            val finalDate: String = newFormat.format(matchDate)
             return finalDate
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun timeFormat(oldTime: String): String {
-            val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
-            val time: Date
-            time = timeformat.parse(oldTime)
+        fun timeFormat(matchTime : Date): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
-            val finalTime: String = newFormat.format(time)
+            val finalTime: String = newFormat.format(matchTime)
             return finalTime
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun toGMTFormat(date: String, time: String): Date? {
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$date $time"
+            return formatter.parse(dateTime)
         }
 
 

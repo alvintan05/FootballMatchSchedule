@@ -27,6 +27,7 @@
     <string name="birth_date">Birth Date</string>
     <string name="birth_location">Birth Location</string>
     <string name="nationality">Nationality</string>
+    <string name="search">Search</string>
 
     <array name="league">
         <item>English Premier League</item>

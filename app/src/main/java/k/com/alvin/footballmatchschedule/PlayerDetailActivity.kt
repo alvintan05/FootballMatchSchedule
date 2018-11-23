@@ -34,6 +34,9 @@ class PlayerDetailActivity : AppCompatActivity() {
     }
 
     private fun showData() {
+        val weight: String = player.playerWeight!!.split(" ")[0]
+        val height: String = player.playerHeight!!.split(" ")[0]
+
         Glide
                 .with(this)
                 .load(player.playerBanner)
@@ -41,8 +44,8 @@ class PlayerDetailActivity : AppCompatActivity() {
                 .error(R.drawable.no_image)
                 .into(player_banner)
 
-        player_weight.text = player.playerWeight
-        player_height.text = player.playerHeight
+        player_weight.text = weight
+        player_height.text = height
 
         if (player.playerDateSigned.isNullOrBlank()) player_sign_date.text = player.playerDateSigned
         else player_sign_date.text = dateFormat(player.playerDateSigned)

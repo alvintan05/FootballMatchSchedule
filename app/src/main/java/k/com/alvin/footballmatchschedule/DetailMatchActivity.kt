@@ -81,8 +81,10 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     override fun showDetailMatchList(data: List<DetailMatchModel>) {
         detailModels.addAll(data)
 
-        tv_detail_date.text = dateFormat(data[0].matchDate!!)
-        tv_detail_time.text = timeFormat(data[0].matchTime!!)
+        val dateMatch = toGMTFormat(data[0].matchDate!!, data[0].matchTime!!)
+
+        tv_detail_date.text = dateFormat(dateMatch!!)
+        tv_detail_time.text = timeFormat(dateMatch)
         tv_detail_home_team.text = data[0].homeTeam
         tv_detail_away_team.text = data[0].awayTeam
         tv_detail_home_score.text = data[0].homeScore
@@ -113,23 +115,25 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun dateFormat(oldDate: String): String {
-        val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/mm/yy")
-        val date: Date
-        date = dateFormat.parse(oldDate)
+    fun dateFormat(matchDate: Date) : String {
         val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-        val finalDate: String = newFormat.format(date)
+        val finalDate: String = newFormat.format(matchDate)
         return finalDate
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun timeFormat(oldTime: String): String {
-        val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
-        val time: Date
-        time = timeformat.parse(oldTime)
+    fun timeFormat(matchTime: Date): String {
         val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
-        val finalTime: String = newFormat.format(time)
-        return finalTime
+        val finalTime: String = newFormat.format(matchTime)
+        return  finalTime
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun toGMTFormat(date: String, time: String): Date? {
+        val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
+        val dateTime = "$date $time"
+        return formatter.parse(dateTime)
     }
 
     override fun showLoading() {
@@ -258,8 +262,10 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     private fun showFavorite() {
         getFavorite()
 
-        tv_detail_date.text = dateFormat(favorites[0].matchDate!!)
-        tv_detail_time.text = timeFormat(favorites[0].matchTime!!)
+        val dateMatch = toGMTFormat(favorites[0].matchDate!!, favorites[0].matchTime!!)
+
+        tv_detail_date.text = dateFormat(dateMatch!!)
+        tv_detail_time.text = timeFormat(dateMatch)
         tv_detail_home_team.text = favorites[0].homeTeamName
         tv_detail_away_team.text = favorites[0].awayTeamName
         tv_detail_home_score.text = favorites[0].homeScore

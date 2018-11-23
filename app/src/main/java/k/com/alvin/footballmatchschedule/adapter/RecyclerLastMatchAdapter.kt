@@ -42,6 +42,8 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
 
         fun bindItem(match: MatchModel, listener: (MatchModel) -> Unit) {
 
+            val dateMatch = toGMTFormat(match.matchDate!!, match.matchTime!!)
+
             reminder.invisible()
             homeName.text = match.homeTeam
             awayName.text = match.awayTeam
@@ -56,9 +58,9 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
             else
                 awayScore.text = match.awayScore.toString()
 
-            matchDate.text = dateFormat(match.matchDate!!)
+            matchDate.text = dateFormat(dateMatch!!)
 
-            matchTime.text = timeFormat(match.matchTime!!)
+            matchTime.text = timeFormat(dateMatch)
 
 
             itemView.setOnClickListener {
@@ -67,23 +69,25 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun dateFormat(oldDate: String) : String {
-            val dateFormat: SimpleDateFormat = SimpleDateFormat ("dd/mm/yy")
-            val date: Date
-            date = dateFormat.parse(oldDate)
+        fun dateFormat(matchDate: Date) : String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-            val finalDate: String = newFormat.format(date)
+            val finalDate: String = newFormat.format(matchDate)
             return finalDate
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun timeFormat(oldTime: String): String {
-            val timeformat: SimpleDateFormat = SimpleDateFormat("HH:mm:ssZ")
-            val time: Date
-            time = timeformat.parse(oldTime)
+        fun timeFormat(matchTime: Date): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
-            val finalTime: String = newFormat.format(time)
+            val finalTime: String = newFormat.format(matchTime)
             return  finalTime
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun toGMTFormat(date: String, time: String): Date? {
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$date $time"
+            return formatter.parse(dateTime)
         }
 
     }
