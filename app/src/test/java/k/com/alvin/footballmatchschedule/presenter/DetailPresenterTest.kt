@@ -6,10 +6,8 @@ import k.com.alvin.footballmatchschedule.api.ApiRepository
 import k.com.alvin.footballmatchschedule.api.TheSportDBApi
 import k.com.alvin.footballmatchschedule.model.*
 import k.com.alvin.footballmatchschedule.view.DetailView
-import k.com.alvin.footballmatchschedule.view.NextView
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.junit.Before
 import org.mockito.Mock
 import org.mockito.Mockito.`when`

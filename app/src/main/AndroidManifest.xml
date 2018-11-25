@@ -20,10 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailMatchActivity"
-            android:theme="@style/NoActionBar">
-
-        </activity>
+        <activity
+            android:name=".DetailMatchActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".TeamDetailActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".PlayerDetailActivity"
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".MatchSearchActivity" />
+        <activity android:name=".TeamSearchActivity"></activity>
     </application>
 
 </manifest>

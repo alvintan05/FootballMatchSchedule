@@ -1,6 +1,7 @@
 package k.com.alvin.footballmatchschedule.model
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 /**
  * Created by Alvin Tandiardi on 29/10/2018.
@@ -22,13 +23,19 @@ data class MatchModel(
         @SerializedName("intAwayScore")
         var awayScore: String? = "",
 
-        @SerializedName("strDate")
-        var matchDate: String? = "",
+        @SerializedName("dateEvent")
+        var matchDate: Date? ,
 
         @SerializedName("idHomeTeam")
         var homeId: String? = "",
 
         @SerializedName("idAwayTeam")
-        var awayId: String? = ""
+        var awayId: String? = "",
+
+        @SerializedName("strTime")
+        var matchTime: String? = "",
+
+        @SerializedName("strSport")
+        var sportType: String?
 
 )

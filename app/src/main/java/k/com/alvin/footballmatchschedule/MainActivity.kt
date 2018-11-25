@@ -3,9 +3,7 @@ package k.com.alvin.footballmatchschedule
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import k.com.alvin.footballmatchschedule.R.id.*
-import k.com.alvin.footballmatchschedule.fragment.FavoritesFragment
-import k.com.alvin.footballmatchschedule.fragment.LastMatchFragment
-import k.com.alvin.footballmatchschedule.fragment.NextMatchFragment
+import k.com.alvin.footballmatchschedule.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,13 +12,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(main_toolbar)
+
         bottom_navigation_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                last_match -> {
-                    loadLastMatchFragment(savedInstanceState)
+                match -> {
+                    loadMatchFragment(savedInstanceState)
                 }
-                next_match -> {
-                    loadNextMatchFragment(savedInstanceState)
+                teams -> {
+                    loadTeamsFragment(savedInstanceState)
                 }
                 favorite_match -> {
                     loadFavoritesFragment(savedInstanceState)
@@ -29,8 +29,17 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        bottom_navigation_view.selectedItemId = last_match
+        bottom_navigation_view.selectedItemId = match
 
+    }
+
+    private fun loadMatchFragment(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, MatchFragment(), MatchFragment::class.java.simpleName)
+                    .commit()
+        }
     }
 
     private fun loadLastMatchFragment(savedInstanceState: Bundle?) {
@@ -47,6 +56,15 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.container, NextMatchFragment(), NextMatchFragment::class.java.simpleName)
+                    .commit()
+        }
+    }
+
+    private fun loadTeamsFragment(savedInstanceState: Bundle?){
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, TeamsFragment(), TeamsFragment::class.java.simpleName)
                     .commit()
         }
     }

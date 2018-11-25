@@ -2,12 +2,15 @@ package k.com.alvin.footballmatchschedule.adapter
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.model.MatchModel
+import k.com.alvin.footballmatchschedule.util.invisible
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,36 +37,59 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
         private val homeScore: TextView = view.findViewById(R.id.tv_left_score)
         private val awayScore: TextView = view.findViewById(R.id.tv_right_score)
         private val matchDate: TextView = view.findViewById(R.id.tv_date)
+        private val matchTime: TextView = view.findViewById(R.id.tv_time)
+        private val reminder: ImageView = view.findViewById(R.id.image_alarm)
 
-        fun bindItem(listMatchModel: MatchModel, listener: (MatchModel) -> Unit) {
-            homeName.text = listMatchModel.homeTeam
-            awayName.text = listMatchModel.awayTeam
+        fun bindItem(match: MatchModel, listener: (MatchModel) -> Unit) {
 
-            if (listMatchModel.homeScore.isNullOrBlank())
+            val dateMatch = toGMTFormat(match.matchDate, match.matchTime)
+
+            reminder.invisible()
+            homeName.text = match.homeTeam
+            awayName.text = match.awayTeam
+
+            if (match.homeScore.isNullOrBlank())
                 homeScore.text = ""
             else
-                homeScore.text = listMatchModel.homeScore.toString()
+                homeScore.text = match.homeScore.toString()
 
-            if (listMatchModel.awayScore.isNullOrBlank())
+            if (match.awayScore.isNullOrBlank())
                 awayScore.text = ""
             else
-                awayScore.text = listMatchModel.awayScore.toString()
+                awayScore.text = match.awayScore.toString()
 
-            matchDate.text = dateFormat(listMatchModel.matchDate!!)
+            matchDate.text = dateFormat(dateMatch)
+
+            matchTime.text = timeFormat(dateMatch)
+
 
             itemView.setOnClickListener {
-                listener(listMatchModel)
+                listener(match)
             }
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun dateFormat(oldDate: String) : String {
-            val dateFormat: SimpleDateFormat = SimpleDateFormat ("dd/mm/yy")
-            val date: Date
-            date = dateFormat.parse(oldDate)
+        fun dateFormat(matchDate : Date?): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-            val finalDate: String = newFormat.format(date)
+            val finalDate: String = newFormat.format(matchDate)
             return finalDate
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun timeFormat(matchTime : Date?): String {
+            val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
+            val finalTime: String = newFormat.format(matchTime)
+            return finalTime
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun toGMTFormat(date: Date?, time: String?): Date? {
+            val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+            val dateString : String = dateStringFormat.format(date)
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$dateString $time"
+            return formatter.parse(dateTime)
         }
 
     }

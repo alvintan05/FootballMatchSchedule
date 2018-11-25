@@ -72,7 +72,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
 
     }
 
-    private fun getFromApi(){
+    private fun getFromApi() {
 
         presenter.getDetailMatchList(eventId)
 
@@ -81,7 +81,10 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     override fun showDetailMatchList(data: List<DetailMatchModel>) {
         detailModels.addAll(data)
 
-        tv_detail_date.text = dateFormat(data[0].matchDate!!)
+        val dateMatch = toGMTFormat(data[0].matchDate, data[0].matchTime)
+
+        tv_detail_date.text = dateFormat(dateMatch)
+        tv_detail_time.text = timeFormat(dateMatch)
         tv_detail_home_team.text = data[0].homeTeam
         tv_detail_away_team.text = data[0].awayTeam
         tv_detail_home_score.text = data[0].homeScore
@@ -96,7 +99,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         tv_detail_away_defense.text = data[0].awayLineupDefense?.replace("; ", "\n")
         tv_detail_home_midfield.text = data[0].homeLineupMidfield?.replace("; ", "\n")
         tv_detail_away_midfield.text = data[0].awayLineupMidfield?.replace("; ", "\n")
-        tv_detail_home_forward.text = data[0].homeLineupForward?.replace("; " , "\n")
+        tv_detail_home_forward.text = data[0].homeLineupForward?.replace("; ", "\n")
         tv_detail_away_forward.text = data[0].awayLineupForward?.replace("; ", "\n")
         tv_detail_home_subtitute.text = data[0].homeLineupSubtitutes?.replace("; ", "\n")
         tv_detail_away_subtitute.text = data[0].awayLineupSubtitutes?.replace("; ", "\n")
@@ -104,21 +107,87 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     }
 
     override fun showHomeInfo(data: List<TeamInfoModel>) {
-        Glide.with(this).load(data[0].teamLogoLink).override(120, 120).into(image_home_team)
+        Glide.with(this).load(data[0].teamBadge).override(120, 120).into(image_home_team)
     }
 
     override fun showAwayInfo(data: List<TeamInfoModel>) {
-        Glide.with(this).load(data[0].teamLogoLink).override(120, 120).into(image_away_team)
+        Glide.with(this).load(data[0].teamBadge).override(120, 120).into(image_away_team)
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun dateFormat(oldDate: String): String {
-        val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/mm/yy")
-        val date: Date
-        date = dateFormat.parse(oldDate)
+    fun dateFormat(matchDate : Date?): String {
         val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
-        val finalDate: String = newFormat.format(date)
+        val finalDate: String = newFormat.format(matchDate)
         return finalDate
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun timeFormat(matchTime : Date?): String {
+        val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
+        val finalTime: String = newFormat.format(matchTime)
+        return finalTime
+    }
+
+    fun dateFormatSaveDB(matchDate: Date?) : String {
+        val format: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+        val result: String = format.format(matchDate)
+        return result
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun toGMTFormat(date: Date?, time: String?): Date? {
+        var result: Date? = null
+
+        if (time.isNullOrBlank()) {
+            val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+            val dateString: String = dateStringFormat.format(date)
+            val formatter = SimpleDateFormat("dd/MM/yy")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            result = formatter.parse(dateString)
+        }
+
+        if (date == null) {
+            val formatter = SimpleDateFormat("HH:mm")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            result = formatter.parse(time)
+        }
+
+        if (!time.isNullOrBlank() && date != null) {
+            val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+            val dateString: String = dateStringFormat.format(date)
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$dateString $time"
+            result = formatter.parse(dateTime)
+        }
+
+        return result
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun toGMTFormatString(date: String?, time: String?): Date? {
+        var result: Date? = null
+
+        if (time.isNullOrBlank()) {
+            val formatter = SimpleDateFormat("dd/MM/yy")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            result = formatter.parse(date)
+        }
+
+        if (date == null) {
+            val formatter = SimpleDateFormat("HH:mm")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            result = formatter.parse(time)
+        }
+
+        if (!time.isNullOrBlank() && date != null) {
+            val formatter = SimpleDateFormat("dd/MM/yy HH:mm")
+            formatter.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = "$date $time"
+            result = formatter.parse(dateTime)
+        }
+
+        return result
     }
 
     override fun showLoading() {
@@ -171,7 +240,8 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
                         Favorite.AWAY_SCORE to detailModels[0].awayScore,
                         Favorite.HOME_SHOTS to detailModels[0].homeShots,
                         Favorite.AWAY_SHOTS to detailModels[0].awayShots,
-                        Favorite.MATCH_DATE to detailModels[0].matchDate,
+                        Favorite.MATCH_DATE to dateFormatSaveDB(detailModels[0].matchDate),
+                        Favorite.MATCH_TIME to detailModels[0].matchTime,
                         Favorite.AWAY_GOAL_DETAILS to detailModels[0].awayGoalDetails,
                         Favorite.AWAY_LINEUP_DEFENSE to detailModels[0].awayLineupDefense,
                         Favorite.AWAY_LINEUP_FORWARD to detailModels[0].awayLineupForward,
@@ -210,7 +280,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_add_to_favorites)
     }
 
-    private fun favoriteState(){
+    private fun favoriteState() {
         database.use {
             val result = select(Favorite.TABLE_FAVORITE)
                     .whereArgs("(EVENT_ID = {id})",
@@ -220,7 +290,7 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
         }
     }
 
-    private fun checkStatus(){
+    private fun checkStatus() {
         if (checkType == "1") {
             Log.d("DetailActivity", "Dari API")
             getFromApi()
@@ -246,7 +316,10 @@ class DetailMatchActivity : AppCompatActivity(), DetailView {
     private fun showFavorite() {
         getFavorite()
 
-        tv_detail_date.text = dateFormat(favorites[0].matchDate!!)
+        val dateMatchString = toGMTFormatString(favorites[0].matchDate, favorites[0].matchTime)
+
+        tv_detail_date.text = dateFormat(dateMatchString)
+        tv_detail_time.text = timeFormat(dateMatchString)
         tv_detail_home_team.text = favorites[0].homeTeamName
         tv_detail_away_team.text = favorites[0].awayTeamName
         tv_detail_home_score.text = favorites[0].homeScore

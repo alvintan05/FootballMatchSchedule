@@ -7,7 +7,28 @@ import com.google.gson.annotations.SerializedName
  */
 data class TeamInfoModel(
 
+        @SerializedName("idTeam")
+        val teamId: String? = "",
+
+        @SerializedName("strTeam")
+        var teamName: String? = "",
+
         @SerializedName("strTeamBadge")
-        var teamLogoLink: String? = ""
+        var teamBadge: String? = "",
+
+        @SerializedName("intFormedYear")
+        var teamFormedYear: String? = "",
+
+        @SerializedName("strStadium")
+        var teamStadium: String? = "",
+
+        @SerializedName("strDescriptionEN")
+        var teamDescription: String? = "",
+
+        @SerializedName("strStadiumThumb")
+        var teamStadiumImage: String? = "",
+
+        @SerializedName("strSport")
+        var sportType: String?
 
 )

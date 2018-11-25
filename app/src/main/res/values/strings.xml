@@ -2,7 +2,6 @@
     <string name="app_name">FootballMatchSchedule</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="toolbar_title">Football Match Schedule</string>
     <string name="vs">VS</string>
     <string name="goals">Goals</string>
     <string name="shots">Shots</string>
@@ -12,9 +11,27 @@
     <string name="midfield">Midfield</string>
     <string name="forward">Forward</string>
     <string name="subtitutes">Subtitutes</string>
-    <string name="prev_match">Prev Match</string>
-    <string name="next_match">Next Match</string>
     <string name="favorites">Favorites</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="matches">Matches</string>
+    <string name="teams">Teams</string>
+    <string name="weight_kg">Weight (Kg)</string>
+    <string name="height_m">Height (m)</string>
+    <string name="about">About</string>
+    <string name="sign_date">Sign Date</string>
+    <string name="position">Position</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="birth_location">Birth Location</string>
+    <string name="nationality">Nationality</string>
+    <string name="search">Search</string>
+
+    <array name="league">
+        <item>English Premier League</item>
+        <item>English League Championship</item>
+        <item>German Bundesliga</item>
+        <item>Italian Serie A</item>
+        <item>French Ligue 1</item>
+        <item>Spanish La Liga</item>
+    </array>
+
 </resources>
