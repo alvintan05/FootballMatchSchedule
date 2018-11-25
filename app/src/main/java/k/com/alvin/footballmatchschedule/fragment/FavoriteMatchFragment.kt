@@ -81,6 +81,4 @@ class FavoriteMatchFragment : Fragment() {
             progressBar.invisible()
         }
     }
-
-
 }

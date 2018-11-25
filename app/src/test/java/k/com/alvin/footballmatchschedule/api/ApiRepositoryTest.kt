@@ -2,12 +2,11 @@ package k.com.alvin.footballmatchschedule.api
 
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 /**
- * Created by Alvin Tandiardi on 13/11/2018.
+ * Created by Alvin Tandiardi on 25/11/2018.
  */
 class ApiRepositoryTest {
 
@@ -39,6 +38,38 @@ class ApiRepositoryTest {
     fun testDoRequestTeamInfo() {
         val apiRepository = mock(ApiRepository::class.java)
         val url = "https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id=134777"
+        apiRepository.doRequest(url)
+        verify(apiRepository).doRequest(url)
+    }
+
+    @Test
+    fun testDoRequestTeams() {
+        val apiRepository = mock(ApiRepository::class.java)
+        val url = "https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=English%20Premier%20League"
+        apiRepository.doRequest(url)
+        verify(apiRepository).doRequest(url)
+    }
+
+    @Test
+    fun testDoRequestPlayers() {
+        val apiRepository = mock(ApiRepository::class.java)
+        val url = "https://www.thesportsdb.com/api/v1/json/1/searchplayers.php?t=Arsenal"
+        apiRepository.doRequest(url)
+        verify(apiRepository).doRequest(url)
+    }
+
+    @Test
+    fun testDoRequestSearchTeam() {
+        val apiRepository = mock(ApiRepository::class.java)
+        val url = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=Arsenal"
+        apiRepository.doRequest(url)
+        verify(apiRepository).doRequest(url)
+    }
+
+    @Test
+    fun testDoRequestSearchMatch() {
+        val apiRepository = mock(ApiRepository::class.java)
+        val url = "https://www.thesportsdb.com/api/v1/json/1/searchevents.php?e=Arsenal_vs_Chelsea"
         apiRepository.doRequest(url)
         verify(apiRepository).doRequest(url)
     }

@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.SearchView
 import android.view.*
+import k.com.alvin.footballmatchschedule.MatchSearchActivity
 
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.adapter.MatchPagerAdapter
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.toast
 
 /**
  * A simple [Fragment] subclass.
@@ -40,8 +44,23 @@ class MatchFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.search_menu, menu)
+        val searchItem = menu?.findItem(R.id.menu_search)
+        if (searchItem != null) {
+            val searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    ctx.startActivity<MatchSearchActivity>(
+                            "search" to query
+                    )
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
     }
-
-
 
 }// Required empty public constructor

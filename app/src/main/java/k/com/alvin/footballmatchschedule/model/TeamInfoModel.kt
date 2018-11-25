@@ -26,6 +26,9 @@ data class TeamInfoModel(
         var teamDescription: String? = "",
 
         @SerializedName("strStadiumThumb")
-        var teamStadiumImage: String? = ""
+        var teamStadiumImage: String? = "",
+
+        @SerializedName("strSport")
+        var sportType: String?
 
 )

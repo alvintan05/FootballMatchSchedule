@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="5dp"
-    tools:context="k.com.alvin.footballmatchschedule.MatchSearchActivity">
+    tools:context="k.com.alvin.footballmatchschedule.TeamSearchActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_search_match"
+        android:id="@+id/rv_teams_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="5dp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:paddingTop="5dp"
-        tools:listitem="@layout/item_match">
+        tools:listitem="@layout/item_team">
 
     </android.support.v7.widget.RecyclerView>
 

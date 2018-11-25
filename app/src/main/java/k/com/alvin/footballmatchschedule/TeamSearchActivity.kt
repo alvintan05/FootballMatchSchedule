@@ -6,49 +6,50 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import com.google.gson.Gson
-import k.com.alvin.footballmatchschedule.adapter.RecyclerSearchMatchAdapter
+import k.com.alvin.footballmatchschedule.adapter.RecyclerTeamsAdapter
 import k.com.alvin.footballmatchschedule.api.ApiRepository
-import k.com.alvin.footballmatchschedule.model.MatchModel
-import k.com.alvin.footballmatchschedule.presenter.SearchMatchPresenter
+import k.com.alvin.footballmatchschedule.model.TeamInfoModel
+import k.com.alvin.footballmatchschedule.presenter.SearchTeamPresenter
 import k.com.alvin.footballmatchschedule.util.invisible
 import k.com.alvin.footballmatchschedule.util.visible
-import k.com.alvin.footballmatchschedule.view.MatchSearchView
-import kotlinx.android.synthetic.main.activity_match_search.*
+import k.com.alvin.footballmatchschedule.view.TeamSearchView
+import kotlinx.android.synthetic.main.activity_team_search.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 
-class MatchSearchActivity : AppCompatActivity(), MatchSearchView {
+class TeamSearchActivity : AppCompatActivity(), TeamSearchView {
 
-    private var searchResultList: MutableList<MatchModel> = mutableListOf()
+    private var searchResultList: MutableList<TeamInfoModel> = mutableListOf()
     private var request: ApiRepository = ApiRepository()
     private var gson: Gson = Gson()
     private var menuItem: Menu? = null
 
-    private lateinit var searchEvent: String
-    private lateinit var presenter: SearchMatchPresenter
-    private lateinit var adapter : RecyclerSearchMatchAdapter
+    private lateinit var searchTeam: String
+    private lateinit var presenter: SearchTeamPresenter
+    private lateinit var adapter: RecyclerTeamsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match_search)
+        setContentView(R.layout.activity_team_search)
 
         val intent = intent
-        searchEvent = intent.getStringExtra("search")
+        searchTeam = intent.getStringExtra("search")
 
-        supportActionBar?.title = searchEvent
+        supportActionBar?.title = searchTeam
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        rv_search_match.layoutManager = LinearLayoutManager(this)
-        adapter = RecyclerSearchMatchAdapter(searchResultList) {
-            startActivity<DetailMatchActivity>(
-                    "eventId" to "${it.eventId}",
-                    "homeId" to "${it.homeId}",
-                    "awayId" to "${it.awayId}",
+        rv_teams_search.layoutManager = LinearLayoutManager(this)
+        adapter = RecyclerTeamsAdapter(searchResultList) {
+            startActivity<TeamDetailActivity>(
+                    "id" to "${it.teamId}",
+                    "name" to "${it.teamName}",
                     "status" to "1")
         }
-        rv_search_match.adapter = adapter
+        rv_teams_search.adapter = adapter
 
-        presenter = SearchMatchPresenter(this, request, gson)
-        presenter.getMatchSearch(searchEvent.replace(" ", "_"))
+        presenter = SearchTeamPresenter(this, request, gson)
+        presenter.getTeamSearch(searchTeam)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -64,7 +65,7 @@ class MatchSearchActivity : AppCompatActivity(), MatchSearchView {
         progress_bar.invisible()
     }
 
-    override fun showMatchSearch(data: List<MatchModel>) {
+    override fun showTeamSearch(data: List<TeamInfoModel>) {
         searchResultList.clear()
         searchResultList.addAll(data)
         adapter.notifyDataSetChanged()
@@ -85,7 +86,7 @@ class MatchSearchActivity : AppCompatActivity(), MatchSearchView {
                 override fun onQueryTextChange(newText: String): Boolean {
 
                     if (newText.isNotEmpty()) {
-                        presenter.getMatchSearch(newText.replace(" ", "_"))
+                        presenter.getTeamSearch(newText)
                     } else {
                         searchResultList.clear()
                     }

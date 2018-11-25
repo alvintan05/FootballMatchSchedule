@@ -16,6 +16,7 @@ import com.google.gson.Gson
 
 import k.com.alvin.footballmatchschedule.R
 import k.com.alvin.footballmatchschedule.TeamDetailActivity
+import k.com.alvin.footballmatchschedule.TeamSearchActivity
 import k.com.alvin.footballmatchschedule.adapter.RecyclerTeamsAdapter
 import k.com.alvin.footballmatchschedule.api.ApiRepository
 import k.com.alvin.footballmatchschedule.model.TeamInfoModel
@@ -25,6 +26,7 @@ import k.com.alvin.footballmatchschedule.view.TeamView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.toast
 
 
 /**
@@ -107,6 +109,23 @@ class TeamsFragment : Fragment(), TeamView {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.search_menu, menu)
+        val searchItem = menu?.findItem(R.id.menu_search)
+        if (searchItem != null) {
+            val searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    ctx.startActivity<TeamSearchActivity>(
+                            "search" to query
+                    )
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return false
+                }
+
+            })
+        }
     }
 
 }

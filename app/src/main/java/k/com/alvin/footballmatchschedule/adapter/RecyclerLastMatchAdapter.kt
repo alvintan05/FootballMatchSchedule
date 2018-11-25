@@ -42,7 +42,7 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
 
         fun bindItem(match: MatchModel, listener: (MatchModel) -> Unit) {
 
-            val dateMatch = toGMTFormat(match.matchDate!!, match.matchTime!!)
+            val dateMatch = toGMTFormat(match.matchDate, match.matchTime)
 
             reminder.invisible()
             homeName.text = match.homeTeam
@@ -58,7 +58,7 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
             else
                 awayScore.text = match.awayScore.toString()
 
-            matchDate.text = dateFormat(dateMatch!!)
+            matchDate.text = dateFormat(dateMatch)
 
             matchTime.text = timeFormat(dateMatch)
 
@@ -69,24 +69,26 @@ class RecyclerLastMatchAdapter(private val listMatchModels: List<MatchModel>, pr
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun dateFormat(matchDate: Date) : String {
+        fun dateFormat(matchDate : Date?): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
             val finalDate: String = newFormat.format(matchDate)
             return finalDate
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun timeFormat(matchTime: Date): String {
+        fun timeFormat(matchTime : Date?): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
             val finalTime: String = newFormat.format(matchTime)
-            return  finalTime
+            return finalTime
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun toGMTFormat(date: String, time: String): Date? {
+        fun toGMTFormat(date: Date?, time: String?): Date? {
+            val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+            val dateString : String = dateStringFormat.format(date)
             val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
             formatter.timeZone = TimeZone.getTimeZone("UTC")
-            val dateTime = "$date $time"
+            val dateTime = "$dateString $time"
             return formatter.parse(dateTime)
         }
 

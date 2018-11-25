@@ -16,23 +16,22 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Created by Alvin Tandiardi on 29/10/2018.
+ * Created by Alvin Tandiardi on 25/11/2018.
  */
-class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private val listener: (MatchModel) -> Unit)
-    : RecyclerView.Adapter<RecyclerNextMatchAdapter.NextMatchViewHolder>() {
+class RecyclerSearchMatchAdapter (private val listMatch: List<MatchModel>, private val listener: (MatchModel) -> Unit)
+    : RecyclerView.Adapter<RecyclerSearchMatchAdapter.SearchMatchViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NextMatchViewHolder {
-        return NextMatchViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_match, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchMatchViewHolder {
+        return SearchMatchViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_match, parent, false))
     }
 
     override fun getItemCount(): Int = listMatch.size
 
-    override fun onBindViewHolder(holder: NextMatchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchMatchViewHolder, position: Int) {
         holder.bindItem(listMatch[position], listener)
-
     }
 
-    class NextMatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class SearchMatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val homeName: TextView = view.findViewById(R.id.tv_left_team)
         private val awayName: TextView = view.findViewById(R.id.tv_right_team)
@@ -63,10 +62,15 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
                 addMatch.invisible()
             }
 
-            matchDate.text = dateFormat(dateMatch)
+            if (listMatch.matchDate == null)
+                matchDate.text = ""
+            else
+                matchDate.text = dateFormat(dateMatch)
 
-            matchTime.text = timeFormat(dateMatch)
-
+            if (listMatch.matchTime.isNullOrBlank())
+                matchTime.text = ""
+            else
+                matchTime.text = timeFormat(dateMatch)
             itemView.setOnClickListener {
                 listener(listMatch)
             }
@@ -84,14 +88,14 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun dateFormat(matchDate: Date?): String {
+        fun dateFormat(matchDate : Date?): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("EEE, dd MMM yyyy")
             val finalDate: String = newFormat.format(matchDate)
             return finalDate
         }
 
         @SuppressLint("SimpleDateFormat")
-        fun timeFormat(matchTime: Date?): String {
+        fun timeFormat(matchTime : Date?): String {
             val newFormat: SimpleDateFormat = SimpleDateFormat("HH:mm")
             val finalTime: String = newFormat.format(matchTime)
             return finalTime
@@ -99,14 +103,32 @@ class RecyclerNextMatchAdapter(private val listMatch: List<MatchModel>, private 
 
         @SuppressLint("SimpleDateFormat")
         fun toGMTFormat(date: Date?, time: String?): Date? {
-            val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
-            val dateString: String = dateStringFormat.format(date)
-            val formatter = SimpleDateFormat("dd/MM/yy HH:mm:ss")
-            formatter.timeZone = TimeZone.getTimeZone("UTC")
-            val dateTime = "$dateString $time"
-            return formatter.parse(dateTime)
+            var result: Date? = null
+
+            if (time.isNullOrBlank()) {
+                val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+                val dateString: String = dateStringFormat.format(date)
+                val formatter = SimpleDateFormat("dd/MM/yy")
+                formatter.timeZone = TimeZone.getTimeZone("UTC")
+                result = formatter.parse(dateString)
+            }
+
+            if (date == null) {
+                val formatter = SimpleDateFormat("HH:mm")
+                formatter.timeZone = TimeZone.getTimeZone("UTC")
+                result = formatter.parse(time)
+            }
+
+            if (!time.isNullOrBlank() && date != null) {
+                val dateStringFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
+                val dateString: String = dateStringFormat.format(date)
+                val formatter = SimpleDateFormat("dd/MM/yy HH:mm")
+                formatter.timeZone = TimeZone.getTimeZone("UTC")
+                val dateTime = "$dateString $time"
+                result = formatter.parse(dateTime)
+            }
+
+            return result
         }
-
     }
-
 }
