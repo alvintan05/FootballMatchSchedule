@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FootballMatchSchedule.iml" filepath="$PROJECT_DIR$/FootballMatchSchedule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/FootballMatchSchedule-app.iml" filepath="$PROJECT_DIR$/app/FootballMatchSchedule-app.iml" group="FootballMatchSchedule/app" />
+      <module fileurl="file://$PROJECT_DIR$/KADE-FootballMatchSchedule.iml" filepath="$PROJECT_DIR$/KADE-FootballMatchSchedule.iml" group="FootballMatchSchedule" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
