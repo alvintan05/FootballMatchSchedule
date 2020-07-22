@@ -35,4 +35,5 @@ API from: <a href="https://www.thesportsdb.com/" title="TheSportsDB">TheSportsDB
 <a href="https://drive.google.com/file/d/1teSvXQM9Eo_RmQ2Mud0SGQ65DcGUqE7t/view?usp=sharing" title="Football Match Schedule Apps">Download Here</a>
 
 ## Author
-* **Alvin Tandiardi**
+| [<img src="https://avatars1.githubusercontent.com/u/32356015?v=3" width="100px;"/><br /><sub><b>Alvin Tandiardi</b></sub>](https://github.com/alvintan05)<br /> |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
